@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Calculadora de IMC</title>
+<style>
+  body{font-family:Inter,Arial;background:#071026;color:#e6eef6;display:flex;align-items:center;justify-content:center;height:100vh;margin:0}
+  .card{background:linear-gradient(#071827,#081827);padding:20px;border-radius:12px;width:340px;box-shadow:0 8px 30px rgba(0,0,0,.6)}
+  input{width:100%;padding:10px;margin:8px 0;border-radius:8px;border:1px solid rgba(255,255,255,.06);background:#061523;color:#e6eef6}
+  button{padding:10px;border-radius:8px;border:0;background:#0ea5a4;color:#022;cursor:pointer;width:100%}
+  .result{margin-top:12px;padding:10px;border-radius:8px;background:#021620}
+</style>
+</head>
+<body>
+  <div class="card">
+    <h2>Calculadora de IMC</h2>
+    <label>Peso (kg)</label>
+    <input id="peso" type="number" min="0" step="0.1" placeholder="kg"/>
+    <label>Altura (m)</label>
+    <input id="altura" type="number" min="0" step="0.01" placeholder="m"/>
+    <button id="calc">Calcular IMC</button>
+    <div class="result" id="res">Introduce tus datos</div>
+  </div>
+
+<script>
+document.getElementById('calc').addEventListener('click', ()=>{
+  const p = parseFloat(document.getElementById('peso').value);
+  const a = parseFloat(document.getElementById('altura').value);
+  const out = document.getElementById('res');
+  if(!p || !a){ out.textContent = 'Introduce peso y altura válidos'; return; }
+  const imc = p / (a*a);
+  let cat = '';
+  if(imc < 18.5) cat='Bajo peso';
+  else if(imc < 25) cat='Normal';
+  else if(imc < 30) cat='Sobrepeso';
+  else cat='Obesidad';
+  out.innerHTML = `IMC: <strong>${imc.toFixed(2)}</strong> — ${cat}`;
+});
+</script>
+</body>
+</html>

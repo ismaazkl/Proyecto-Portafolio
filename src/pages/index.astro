@@ -1,0 +1,58 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import Header from '../components/Header.astro'
+import ProjectCard from '../components/ProjectCard.astro'
+import Footer from '../components/Footer.astro'
+import '../styles/main.css';
+
+
+
+const proyectos = [
+  { title:'Proyecto 1 — Calculadora', description:'Calculadora didáctica en JS con explicación paso a paso.', image:'/images/calculadora.png', tags:['JS','Didáctico'],link:['proyecto1'] },
+  
+  { title:'Proyecto 2 — Snake', description:'Juego sencillo, un juego recordado por todo joven', image:'/images/snake.jpg', tags:['Juego','Educación'],link:['snake'] },
+]
+---
+<BaseLayout title="Inicio">
+  <Header />
+  <section class="hero">
+    <div class="hero-card">
+      <h1>Hola Mundo, soy Angel</h1>
+      <p></p>
+      <div style="margin-top:1rem">
+        <section>
+          <section style="margin-top:1.6rem">
+          
+          <h2 style="color:var(--muted,#020202);max-width:1000px;margin:0 auto;">
+            Soy un Joven desarrollador de colegio, sin tantas experiencias pero mucho que aportar,siempre motivado, queriendo saber cada dia mas sobre lo que me apasiona, tengo varias metas, he visto cursos en <link rel="stylesheet" href="tutorialesprogramacionya.com">Tutoriales programacionYa , Me gusta lo que hago y creo, me motivo de las personas que me rodean, me gusta crear soluciones prácticas y educativas a través de la programación. Me encanta aprender nuevas tecnologías y compartir mis conocimientos con la comunidad que cada dia aparecen.
+            <h3>
+              Metas:
+              <ul>
+                <li>Aprender más sobre desarrollo web y móvil.</li>
+                <li>Contribuir a proyectos de código abierto.</li>
+                <li>Crear aplicaciones útiles para la comunidad.</li>
+                <li>Rodearme de personas que me guien</li>
+                <ol>Good is great </ol>
+              </ul>
+            </h3>
+          </h2>
+        </section> 
+      </section>
+
+        <a href="/proyectos" style="text-decoration:none;color:var(--accent);font-weight:600">Ver Proyectos →</a>
+      </div>
+    </div>
+    <div>
+      <img src="/images/hero.jpg" alt="hero" style="width:100%;border-radius:12px;object-fit:cover;max-height:320px" />
+    </div>
+  <section style="margin-top:1.6rem">
+    <h2 style="margin:0 0 0.6rem 0">Un poco de mis increibles proyectos en clase</h2>
+    <div class="grid">
+      {proyectos.map(p => (
+        <ProjectCard title={p.title} description={p.description} image={p.image} tags={p.tags} link ={p.link} />
+      ))}
+    </div>
+  </section>
+  
+  <Footer/>
+</BaseLayout>

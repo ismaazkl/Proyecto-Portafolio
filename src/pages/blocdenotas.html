@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Bloc de notas</title>
+<style>
+  body{font-family:Inter,Arial;background:#071026;color:#e6eef6;padding:24px}
+  .wrap{max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr 360px;gap:12px}
+  textarea{width:100%;height:300px;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,.06);background:#061523;color:#e6eef6;resize:vertical}
+  button{padding:8px;border-radius:8px;border:0;background:#0ea5a4;color:#022;cursor:pointer;margin-top:8px}
+  .note{padding:8px;border-radius:8px;background:#021620;margin-bottom:8px}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div>
+      <h2>Bloc de notas</h2>
+      <textarea id="text" placeholder="Escribe aquí..."></textarea>
+      <div style="display:flex;gap:8px">
+        <button id="save">Guardar</button>
+        <button id="download">Descargar .txt</button>
+        <button id="clear">Borrar</button>
+      </div>
+    </div>
+    <div class="card" style="background:linear-gradient(#071827,#081827);padding:12px;border-radius:12px">
+      <h3>Guardadas</h3>
+      <div id="list"></div>
+    </div>
+  </div>
+
+<script>
+const KEY = 'bloc-notas-v1';
+let saved = JSON.parse(localStorage.getItem(KEY) || '[]');
+
+function render(){
+  const list = document.getElementById('list'); list.innerHTML='';
+  saved.forEach((s,i)=>{
+    const d = document.createElement('div'); d.className='note';
+    d.innerHTML = `<div style="font-size:0.9rem">${s.slice(0,120).replace(/\n/g,' ')}${s.length>120?'…':''}</div>
+       <div style="margin-top:6px"><button data-i="${i}" class="load">Cargar</button> <button data-i="${i}" class="del">Eliminar</button></div>`;
+    list.appendChild(d);
+  });
+  document.querySelectorAll('.load').forEach(b=>b.addEventListener('click', e=>{
+    document.getElementById('text').value = saved[+e.target.dataset.i];
+  }));
+  document.querySelectorAll('.del').forEach(b=>b.addEventListener('click', e=>{
+    saved.splice(+e.target.dataset.i,1);
+    localStorage.setItem(KEY, JSON.stringify(saved));
+    render();
+  }));
+}
+
+document.getElementById('save').addEventListener('click', ()=>{
+  const t = document.getElementById('text').value;
+  if(!t.trim()) return alert('Nada para guardar');
+  saved.push(t);
+  localStorage.setItem(KEY, JSON.stringify(saved));
+  document.getElementById('text').value='';
+  render();
+});
+
+document.getElementById('download').addEventListener('click', ()=>{
+  const t = document.getElementById('text').value;
+  if(!t) return alert('Nada para descargar');
+  const blob = new Blob([t], {type:'text/plain'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url; a.download = 'nota.txt'; a.click();
+  URL.revokeObjectURL(url);
+});
+
+document.getElementById('clear').addEventListener('click', ()=>{
+  if(confirm('Borrar campo actual?')) document.getElementById('text').value='';
+});
+
+render();
+</script>
+</body>
+</html>

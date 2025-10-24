@@ -1,0 +1,126 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import Footer from '../components/Footer.astro';
+import ProyectoListaTareas from './proyecto1.astro';
+
+import '../components/proyectos.css';
+
+interface Proyecto {
+  title: string;
+  description: string;
+  image?: string;
+  tags?: string[];
+  link?: string
+}
+
+const proyectos: Proyecto[] = [
+  {
+    title: 'Gestor / Planificación de Tareas a Usuarios',
+    description: 'Administra tareas y asignaciones fácilmente entre diferentes usuarios.',
+    image: '/images/GP.png',
+    tags: ['Sencillo', 'Personalizable'],
+    link: '/tareas' // 👈 aquí colocas la ruta del archivo
+  },
+  {
+    title: 'Agenda / Calendario simple',
+    description: 'Conjunto de herramientas para mejorar la productividad diaria.',
+    image: '/images/AG.png',
+    tags: ['Productividad', 'Utilidades'],
+    link: '/agenda'
+  },
+  {
+    title: '🗓️ Planificador semanal',
+    description: 'Aplicación para organizar tareas y actividades semanales.',
+    image: '/images/AS.jpg',
+    tags: ['Organización', 'Planificación'],
+    link: '/planificador'
+  },
+  {
+    title: 'Bloc de notas',
+    description: 'Aplicación sencilla para tomar y guardar notas rápidamente.',
+    image: '/images/BC.png',
+    tags: ['Notas', 'Utilidad'],
+    link: '/blocdenotas'
+  },
+  {
+    title: 'Calculadora de IMC',
+    description: 'Calculadora simple para determinar el índice de masa corporal.',
+    image: '/images/IMC.jpg',
+    tags: ['Tkinter', 'Python'],
+    link: "/imc"
+    
+  },
+  {
+    title: 'Conversor de unidades',
+    description: 'Convierte entre diferentes unidades de medida fácilmente.',
+    image: '/images/CDU.jpg',
+    tags: ['Conversión', 'Utilidad'],
+    link: '/proyecto6'
+  },
+
+
+  {
+    title: "Lista de tareas",
+    description: "Pagina que ayuda al usuario a ser mas planificador y no olvidarase de sus tareas, sin recordatorios",
+    image: "/images/listadetareas.png",
+    tags: ["Casero","24/7"],
+    link: "proyecto3" 
+  },
+];
+
+---
+
+<BaseLayout title="Proyectos">
+  <Header />
+
+  <section style="padding: 2rem; text-align: center;">
+    <h2 style="font-size: 2rem; margin-bottom: 1rem;">💼 Mis Proyectos</h2>
+    <h3 style="color: var(--muted, #666); max-width: 600px; margin: 0 auto;">
+      Proyectos Basicos, con un lenguaje moderano sin tanto sintaxis, y entendible <li> Aquí encontrarás una colección de proyectos creados para practicar, aprender y resolver tareas del día a día. </li> 
+    </h3>
+
+    <div class="grid">
+      {proyectos.map((p) => (
+        <ProjectCard
+          title={p.title}
+          description={p.description}
+          image={p.image}
+          tags={p.tags}
+          link={p.link}
+        />
+      ))}
+    </div>
+  </section>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.8rem;
+    margin-top: 2rem;
+  }
+
+  h2 {
+    font-weight: 600;
+  }
+
+  section {
+    animation: fadeIn 0.6s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

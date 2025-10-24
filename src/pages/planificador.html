@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Planificador semanal</title>
+<style>
+  body{font-family:Inter,Arial;background:#071026;color:#e6eef6;padding:20px}
+  .wrap{max-width:1000px;margin:0 auto}
+  .grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+  .day{background:linear-gradient(#071827,#081827);padding:10px;border-radius:8px;min-height:120px}
+  input,textarea{width:100%;padding:6px;border-radius:6px;border:1px solid rgba(255,255,255,.04);background:#061523;color:#e6eef6}
+  button{padding:8px;border-radius:8px;border:0;background:#0ea5a4;color:#022;cursor:pointer;margin-top:6px}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <h2>Planificador semanal</h2>
+    <div style="display:flex;gap:8px;margin-bottom:12px">
+      <input id="task" placeholder="nueva tarea...">
+      <select id="day">
+        <option value="0">Lunes</option><option value="1">Martes</option><option value="2">Miércoles</option><option value="3">Jueves</option><option value="4">Viernes</option><option value="5">Sábado</option><option value="6">Domingo</option>
+      </select>
+      <button id="add">Agregar</button>
+    </div>
+
+    <div class="grid" id="grid"></div>
+  </div>
+
+<script>
+const KEY = 'plan-semana-v1';
+let weeks = JSON.parse(localStorage.getItem(KEY) || '[]');
+if(!Array.isArray(weeks) || weeks.length !== 7) weeks = [[],[],[],[],[],[],[]];
+
+const names = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+
+function render(){
+  const grid = document.getElementById('grid'); grid.innerHTML='';
+  weeks.forEach((arr,i)=>{
+    const box = document.createElement('div'); box.className='day';
+    let inner = `<strong>${names[i]}</strong><div style="margin-top:8px">`;
+    arr.forEach((t, idx)=>{
+      inner += `<div style="padding:6px;margin-bottom:6px;background:#021620;border-radius:6px;display:flex;justify-content:space-between;align-items:center">
+        <div>${t}</div><div><button data-i="${i}" data-j="${idx}" class="del">✕</button></div></div>`;
+    });
+    inner += `</div>`;
+    box.innerHTML = inner;
+    grid.appendChild(box);
+  });
+  document.querySelectorAll('.del').forEach(b=>b.addEventListener('click', e=>{
+    const i = +e.target.dataset.i, j = +e.target.dataset.j;
+    weeks[i].splice(j,1); localStorage.setItem(KEY, JSON.stringify(weeks)); render();
+  }));
+}
+
+document.getElementById('add').addEventListener('click', ()=>{
+  const t = document.getElementById('task').value.trim();
+  const d = +document.getElementById('day').value;
+  if(!t) return alert('Escribe una tarea');
+  weeks[d].push(t);
+  localStorage.setItem(KEY, JSON.stringify(weeks));
+  document.getElementById('task').value='';
+  render();
+});
+
+render();
+</script>
+</body>
+</html>

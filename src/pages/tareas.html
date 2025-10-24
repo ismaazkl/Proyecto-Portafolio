@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Gestor de tareas</title>
+<style>
+  body{font-family:Inter,Arial;background:#071026;color:#e6eef6;padding:22px}
+  .wrap{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:1fr 320px;gap:16px}
+  .card{background:linear-gradient(#071827,#081827);padding:16px;border-radius:12px}
+  input,select{width:100%;padding:8px;margin:6px 0;border-radius:8px;border:1px solid rgba(255,255,255,.06);background:#061523;color:#e6eef6}
+  .task{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:8px;background:#021620;margin-bottom:8px}
+  .tags{display:flex;gap:6px}
+  button{padding:8px;border-radius:8px;border:0;background:#0ea5a4;color:#022;cursor:pointer}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h2>Gestor de Tareas</h2>
+      <label>Usuario</label>
+      <input id="user" placeholder="ej. Ana" />
+      <label>Tarea</label>
+      <input id="task" />
+      <label>Prioridad</label>
+      <select id="prio"><option>Media</option><option>Baja</option><option>Alta</option></select>
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <button id="add">Agregar</button>
+        <button id="clear">Limpiar usuario</button>
+      </div>
+
+      <h3 style="margin-top:12px">Tareas</h3>
+      <div id="list"></div>
+    </div>
+
+    <div class="card">
+      <h3>Usuarios</h3>
+      <div id="users"></div>
+    </div>
+  </div>
+
+<script>
+const KEY = 'tareas-por-usuario-v1';
+let data = JSON.parse(localStorage.getItem(KEY) || '{}');
+
+function save(){ localStorage.setItem(KEY, JSON.stringify(data)); render(); }
+function render(){
+  const list = document.getElementById('list'); list.innerHTML='';
+  const usersDiv = document.getElementById('users'); usersDiv.innerHTML='';
+  const user = document.getElementById('user').value.trim();
+  const users = Object.keys(data);
+  users.forEach(u=>{
+    const btn = document.createElement('button');
+    btn.textContent = u; btn.style.display='block'; btn.style.margin='6px 0';
+    btn.addEventListener('click', ()=> {
+      document.getElementById('user').value = u; render();
+    });
+    usersDiv.appendChild(btn);
+  });
+
+  if(user && data[user]){
+    data[user].forEach((t, idx)=>{
+      const d = document.createElement('div'); d.className='task';
+      d.innerHTML = `<div>
+          <div style="font-weight:600">${t.text}</div>
+          <div style="font-size:0.85rem;color:#9fbfd0">${t.prio}</div>
+        </div>
+        <div style="display:flex;gap:6px">
+          <button data-i="${idx}" class="del">Eliminar</button>
+        </div>`;
+      list.appendChild(d);
+    });
+  } else {
+    list.innerHTML = '<div style="color:#7fb0c9">Selecciona o escribe un usuario y agrega tareas</div>';
+  }
+
+  document.querySelectorAll('.del').forEach(b=>b.addEventListener('click', e=>{
+    const i = +e.target.dataset.i;
+    const u = document.getElementById('user').value.trim();
+    if(u && data[u]){ data[u].splice(i,1); if(data[u].length===0) delete data[u]; save(); }
+  }));
+}
+
+document.getElementById('add').addEventListener('click', ()=>{
+  const user = document.getElementById('user').value.trim();
+  const task = document.getElementById('task').value.trim();
+  const prio = document.getElementById('prio').value;
+  if(!user || !task){ alert('Usuario y tarea obligatorios'); return; }
+  if(!data[user]) data[user]=[];
+  data[user].push({text:task, prio});
+  document.getElementById('task').value='';
+  save();
+});
+
+document.getElementById('clear').addEventListener('click', ()=>{
+  const u = document.getElementById('user').value.trim();
+  if(u && data[u]){ if(confirm(`Borrar todas las tareas de ${u}?`)){ delete data[u]; save(); } }
+});
+
+render();
+</script>
+</body>
+</html>

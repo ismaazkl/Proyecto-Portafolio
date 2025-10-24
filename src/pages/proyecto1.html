@@ -1,0 +1,75 @@
+<style>
+  .proyecto-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #00326bf6;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  .teclado {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .teclado button {
+    padding: 20px;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: rgba(0, 38, 120, 0.774);
+    cursor: pointer;
+  }
+
+  .teclado button:hover {
+    background-color: #0056b3;
+  }
+
+  #resultado {
+    width: 100%;
+    padding: 15px;
+    font-size: 24px;
+    border: 2px solid #000000;
+    border-radius: 5px;
+    text-align: right;
+    box-sizing: border-box;
+  }
+  body {
+    background-color: #011139;
+    color: #e6eef6;
+    font-family: Inter, Arial, sans-serif;
+    padding: 20px;
+  }
+</style>
+
+<BaseLayout title="Calculadora Basica">
+  <main class="proyecto-container">
+    <h1> Calculadora Basica</h1>
+    <input type="text" id="resultado" readonly />
+    <div class="teclado">
+      <button>7</button><button>8</button><button>9</button><button>/</button>
+      <button>4</button><button>5</button><button>6</button><button>*</button>
+      <button>1</button><button>2</button><button>3</button><button>-</button>
+      <button>0</button><button>.</button><button>=</button><button>+</button>
+      <button id="clear">C</button>
+    </div>
+  </main>
+<script>
+  const display = document.getElementById("resultado");
+const botones = document.querySelectorAll(".teclado button");
+
+botones.forEach(btn => {
+  btn.addEventListener("click", () => {
+    if(btn.id === "clear") display.value = "";
+    else if(btn.textContent === "=") {
+      try { display.value = eval(display.value) } 
+      catch { display.value = "Error" }
+    } else display.value += btn.textContent;
+  });
+});
+
+</script>
+</BaseLayout>

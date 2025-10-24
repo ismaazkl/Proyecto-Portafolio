@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Snake - Culebrita</title>
+<style>
+  body{display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#071026;color:#e6eef6;font-family:Inter,Arial}
+  .game{background:#071827;padding:20px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.6)}
+  canvas{background:#021017;display:block;border-radius:8px}
+  .info{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-top:8px}
+  button{padding:8px 12px;border-radius:8px;border:0;background:#0ea5a4;color:#022;cursor:pointer}
+</style>
+</head>
+<body>
+  <div class="game">
+    <canvas id="c" width="400" height="400"></canvas>
+    <div class="info">
+      <div>Score: <span id="score">0</span></div>
+      <div>
+        <button id="start">Iniciar</button>
+        <button id="pause">Pausa</button>
+      </div>
+    </div>
+    <small>Puedes usar flechas o WASD</small>
+  </div>
+
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const size = 20;
+const cols = canvas.width / size;
+const rows = canvas.height / size;
+
+let snake, dir, food, running, timer, score;
+
+function reset(){
+  snake = [{x:Math.floor(cols/2), y:Math.floor(rows/2)}];
+  dir = {x:1,y:0};
+  placeFood();
+  score = 0; document.getElementById('score').textContent = score;
+  running = false;
+  clearInterval(timer);
+}
+
+function placeFood(){
+  do {
+    food = {x: Math.floor(Math.random()*cols), y: Math.floor(Math.random()*rows)};
+  } while (snake.some(s=>s.x===food.x && s.y===food.y));
+}
+
+function step(){
+  const head = {x: snake[0].x + dir.x, y: snake[0].y + dir.y};
+  // colisiones paredes
+  if(head.x < 0 || head.x >= cols || head.y < 0 || head.y >= rows || snake.some(s=>s.x===head.x && s.y===head.y)){
+    gameOver(); return;
+  }
+  snake.unshift(head);
+  if(head.x === food.x && head.y === food.y){
+    score++; document.getElementById('score').textContent = score;
+    placeFood();
+  } else {
+    snake.pop();
+  }
+  draw();
+}
+
+function draw(){
+  ctx.fillStyle = '#021017'; ctx.fillRect(0,0,canvas.width,canvas.height);
+  // food
+  ctx.fillStyle = '#ff4d4d';
+  ctx.fillRect(food.x*size+2, food.y*size+2, size-4, size-4);
+  // snake
+  ctx.fillStyle = '#38bdf8';
+  snake.forEach((s,i)=>{
+    ctx.fillStyle = i===0 ? '#0ea5a4' : '#38bdf8';
+    ctx.fillRect(s.x*size, s.y*size, size-1, size-1);
+  })
+}
+
+function gameOver(){
+  clearInterval(timer); running=false;
+  setTimeout(()=> alert('Game over — Score: ' + score), 50);
+}
+
+document.getElementById('start').addEventListener('click', ()=>{
+  if(running) return;
+  running = true;
+  timer = setInterval(step, 120);
+});
+
+document.getElementById('pause').addEventListener('click', ()=>{
+  if(!running) return;
+  running = false; clearInterval(timer);
+});
+
+window.addEventListener('keydown', (e)=>{
+  const key = e.key.toLowerCase();
+  if(key === 'arrowup' || key === 'w'){ if(dir.y!==1) dir={x:0,y:-1}; }
+  if(key === 'arrowdown' || key === 's'){ if(dir.y!==-1) dir={x:0,y:1}; }
+  if(key === 'arrowleft' || key === 'a'){ if(dir.x!==1) dir={x:-1,y:0}; }
+  if(key === 'arrowright' || key === 'd'){ if(dir.x!==-1) dir={x:1,y:0}; }
+});
+
+reset(); draw();
+</script>
+</body>
+</html>
