@@ -1,0 +1,128 @@
+---
+const { title, description, image, tags = [], link } = Astro.props;
+---
+
+<a href={link} class="card">
+  {
+    image && (
+      <div class="card-image">
+        <img src={image} alt={title} loading="lazy" />
+      </div>
+    )
+  }
+  <div class="card-content">
+    <h3>{title}</h3>
+    <p>{description}</p>
+
+    {
+      tags.length > 0 && (
+        <div class="tag">
+          {tags.map((tag) => (
+            <span class="tag">{tag}</span>
+          ))}
+        </div>
+      )
+    }
+  </div>
+</a>
+
+<style>
+  .card {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    border-radius: 16px;
+    overflow: hidden;
+    background: linear-gradient(145deg, #0f172a, #1e293b);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+    transition:
+      transform 0.25s ease,
+      box-shadow 0.3s ease;
+    color: #e2e8f0;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.4);
+  }
+
+  .card-image {
+    width: 100%;
+    height: 180px;
+    overflow: hidden;
+    background: #0f172a;
+  }
+
+  .card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Mantiene proporción y recorta bien */
+    transition: transform 0.4s ease;
+  }
+
+  .card:hover img {
+    transform: scale(1.05);
+  }
+
+  .card-content {
+    padding: 1rem 1.2rem 1.3rem;
+  }
+
+  h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-bottom: 0.4rem;
+  }
+
+  p {
+    color: #94a3b8;
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+
+  .tags {
+    margin-top: 0.8rem;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    background: rgba(56, 189, 248, 0.15);
+    color: #38bdf8;
+    padding: 0.3rem 0.7rem;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    transition: background 0.2s ease;
+  }
+
+  .tag:hover {
+    background: rgba(56, 189, 248, 0.3);
+  }
+  @media (max-width: 600px) {
+    .card-content {
+      padding: 0.8rem;
+    }
+
+    h3 {
+      font-size: 1rem;
+    }
+
+    p {
+      font-size: 0.9rem;
+    }
+
+    .tags {
+      gap: 0.3rem;
+    }
+
+    .tag {
+      font-size: 0.75rem;
+      padding: 0.2rem 0.5rem;
+    }
+  }
+</style>
