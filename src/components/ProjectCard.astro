@@ -3,24 +3,27 @@ const { title, description, image, tags = [], link } = Astro.props;
 ---
 
 <a href={link} class="card">
-  {image && (
-    <div class="card-image">
-      <img src={image} alt={title} loading="lazy" />
-    </div>
-  )}
+  {
+    image && (
+      <div class="card-image">
+        <img src={image} alt={title} loading="lazy" />
+      </div>
+    )
+  }
   <div class="card-content">
     <h3>{title}</h3>
     <p>{description}</p>
 
-    {tags.length > 0 && (
-      <div class="tag">
-        {tags.map((tag) => (
-          <span class="tag">{tag}</span>
-        ))}
-      </div>
-    )}
+    {
+      tags.length > 0 && (
+        <div class="tag">
+          {tags.map((tag) => (
+            <span class="tag">{tag}</span>
+          ))}
+        </div>
+      )
+    }
   </div>
-  
 </a>
 
 <style>
@@ -32,7 +35,9 @@ const { title, description, image, tags = [], link } = Astro.props;
     overflow: hidden;
     background: linear-gradient(145deg, #0f172a, #1e293b);
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
-    transition: transform 0.25s ease, box-shadow 0.3s ease;
+    transition:
+      transform 0.25s ease,
+      box-shadow 0.3s ease;
     color: #e2e8f0;
     border: 1px solid rgba(255, 255, 255, 0.08);
   }
@@ -97,5 +102,27 @@ const { title, description, image, tags = [], link } = Astro.props;
 
   .tag:hover {
     background: rgba(56, 189, 248, 0.3);
+  }
+  @media (max-width: 600px) {
+    .card-content {
+      padding: 0.8rem;
+    }
+
+    h3 {
+      font-size: 1rem;
+    }
+
+    p {
+      font-size: 0.9rem;
+    }
+
+    .tags {
+      gap: 0.3rem;
+    }
+
+    .tag {
+      font-size: 0.75rem;
+      padding: 0.2rem 0.5rem;
+    }
   }
 </style>
