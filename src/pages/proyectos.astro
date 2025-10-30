@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import Footer from '../components/Footer.astro';
-import ProyectoListaTareas from './proyecto1.astro';
+
 
 import '../components/proyectos.css';
 
@@ -21,7 +21,7 @@ const proyectos: Proyecto[] = [
     description: 'Administra tareas y asignaciones fácilmente entre diferentes usuarios.',
     image: '/images/GP.png',
     tags: ['Sencillo', 'Personalizable'],
-    link: '/tareas' // 👈 aquí colocas la ruta del archivo
+    link: '/tareas' 
   },
   {
     title: 'Agenda / Calendario simple',
@@ -123,4 +123,26 @@ const proyectos: Proyecto[] = [
       transform: translateY(0);
     }
   }
+  .grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+  padding: 0 1rem; 
+}
+
+@media (max-width: 600px) {
+  section {
+    padding: 1.5rem 1rem;
+  }
+
+  h2 {
+    font-size: 1.4rem;
+  }
+
+  p {
+    font-size: 0.95rem;
+  }
+}
+
 </style>
